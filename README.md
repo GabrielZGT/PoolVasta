@@ -16,9 +16,34 @@ campeão que eu escolher, com base no pool de campeões que eu mais jogo.
 - [x] Monta o pool de campeões automaticamente a partir de maestria + últimas 20 partidas
       (nível/pontos de maestria, nota da temporada, win rate recente, flag de "enferrujado"
       quando maestria é alta mas faz tempo que não joga o campeão)
-- [ ] Sugere campeão do meu pool com base na composição aliada x inimiga
+- [x] Sugere automaticamente campeões do meu pool com base em lacunas óbvias da composição
+      aliada (falta tank, time todo do mesmo tipo de dano) — atualiza sozinho a cada tick,
+      sem precisar clicar em nada
+- [x] Detecta se algum aliado/inimigo é especialista/one-trick num campeão (maestria vitalícia
+      concentrada + partidas recentes repetidas) e sugere quem banir — via Riot API oficial,
+      sob demanda (botão "Analisar time")
 - [ ] Mostra a build mais atualizada (itens/runas) do campeão selecionado
 - [ ] Mostra uma sugestão de tática/plano de jogo pra aquela partida específica
+
+### Sobre a detecção de especialista/one-trick
+
+A LCU só dá acesso à maestria/histórico do **seu próprio** usuário. Pra ver dados de
+outros jogadores (aliados, e inimigos quando a Riot não oculta a identidade deles — o que
+é comum em ranqueada) uso a **API oficial da Riot** (`developer.riotgames.com`), com uma
+chave pessoal que você mesmo gera e cola nas configurações do app (expira em 24h). Dois
+sinais são combinados: maestria vitalícia concentrada (≥50% dos pontos da conta num único
+campeão, nível 6+) OU domínio nas últimas partidas recentes (≥60% delas no mesmo campeão,
+mínimo 4 partidas analisadas) — uma conta veterana pode ser craque num campeão sem que isso
+apareça na maestria vitalícia (ela dilui com anos de outros campeões), por isso o segundo
+sinal existe.
+
+### Sobre a sugestão automática de pick
+
+Roda sozinha durante o champion select, sem clique nenhum, porque só usa dados já
+carregados localmente (seu pool + composição do champ select, sem API externa). Combina o
+score do seu pool com um bônus heurístico simples (time sem tank, time todo do mesmo tipo
+de dano) baseado nas tags de classe do próprio Data Dragon — **não é contra-pick real**,
+é uma aproximação. Excluir contra-pick de verdade (matchup por matchup) fica pro roadmap.
 
 ### Sobre o pool ponderado
 
@@ -58,7 +83,8 @@ npm run tauri dev
 1. ~~Conexão com a LCU (status do cliente, dados do summoner)~~
 2. ~~Leitura da sessão de champion select em tempo real~~
 3. ~~Pool de campeões calculado a partir de maestria + histórico de partidas~~
-4. Motor de sugestão por composição (regras simples: contra-pick, balanço de dano, engage/peel)
-5. Exibição de build/runas atualizadas do campeão selecionado
-6. Sugestão de tática por partida
-7. Polimento de UI e empacotamento
+4. ~~Sugestão automática de pick (heurística de composição) + detecção de one-trick/especialista~~
+5. Contra-pick de verdade (matchup por matchup, não só heurística de classe)
+6. Exibição de build/runas atualizadas do campeão selecionado
+7. Sugestão de tática por partida
+8. Polimento de UI e empacotamento

@@ -5,6 +5,10 @@ use std::collections::HashMap;
 pub struct ChampionMeta {
     pub id: String, // ex: "Ashe" — usado nas URLs de ícone da CDN
     pub name: String,
+    /// Classes do campeão (ex: "Tank", "Mage", "Marksman") — usadas como proxy
+    /// aproximado de papel/tipo de dano pro motor de sugestão. Não é dado de
+    /// contra-pick real, só a categorização do próprio Data Dragon.
+    pub tags: Vec<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -12,6 +16,8 @@ struct ChampionJsonEntry {
     key: String, // championId numérico, como string
     id: String,
     name: String,
+    #[serde(default)]
+    tags: Vec<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -54,6 +60,7 @@ pub async fn fetch_champion_map() -> Result<HashMap<u32, ChampionMeta>, String> 
                 ChampionMeta {
                     id: entry.id,
                     name: entry.name,
+                    tags: entry.tags,
                 },
             );
         }

@@ -4,6 +4,7 @@ use sysinfo::{ProcessRefreshKind, ProcessesToUpdate, System, UpdateKind};
 pub struct LcuCredentials {
     pub port: String,
     pub token: String,
+    pub region: String,
 }
 
 impl LcuCredentials {
@@ -58,7 +59,8 @@ pub fn find_credentials(system: &mut System) -> Option<LcuCredentials> {
 
             let port = extract_arg(&cmd, "--app-port=")?;
             let token = extract_arg(&cmd, "--remoting-auth-token=")?;
-            Some(LcuCredentials { port, token })
+            let region = extract_arg(&cmd, "--region=").unwrap_or_default();
+            Some(LcuCredentials { port, token, region })
         })
 }
 

@@ -101,6 +101,50 @@ h1 {
   cursor: default;
 }
 
+.key-row {
+  display: flex;
+  gap: 0.5em;
+  margin-top: 0.6em;
+}
+
+.key-row input {
+  flex: 1;
+  min-width: 0;
+  border-radius: 8px;
+  border: 1px solid #dddddd;
+  padding: 0.4em 0.7em;
+  font-size: 0.9em;
+}
+
+.key-row button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.4em 0.9em;
+  font-size: 0.85em;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: #396cd8;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.key-row button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.team li .badge {
+  display: block;
+  margin-top: 0.2em;
+  width: fit-content;
+}
+
+.badge.onetrick {
+  background-color: #fbdcd4;
+  color: #a13a1f;
+  font-weight: 600;
+}
+
 .teams {
   display: flex;
   gap: 1.5em;
@@ -137,6 +181,17 @@ h1 {
 .team .position {
   color: #888888;
   font-size: 0.85em;
+}
+
+.suggestions {
+  margin-top: 1em;
+  padding-top: 0.8em;
+  border-top: 1px solid #e4e4e4;
+}
+
+.suggestions h3 {
+  margin: 0 0 0.2em;
+  font-size: 0.9em;
 }
 
 .pool-list {
@@ -240,5 +295,20 @@ h1 {
   .badge.rusty {
     background-color: #5a2a1c;
     color: #ffcdbd;
+  }
+
+  .badge.onetrick {
+    background-color: #5a2a1c;
+    color: #ffcdbd;
+  }
+
+  .key-row input {
+    border-color: #444444;
+    background-color: #1d1d1d;
+    color: #f6f6f6;
+  }
+
+  .suggestions {
+    border-top-color: #3a3a3a;
   }
 }
