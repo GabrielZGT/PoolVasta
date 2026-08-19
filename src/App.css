@@ -15,12 +15,12 @@
 }
 
 .container {
-  margin: 0;
-  padding-top: 10vh;
+  margin: 0 auto;
+  max-width: 640px;
+  padding: 3vh 1.5em 3em;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
   text-align: center;
 }
 
@@ -31,6 +31,7 @@ h1 {
 .status-row {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.6em;
   margin-top: 1em;
 }
@@ -54,7 +55,145 @@ h1 {
 .hint {
   margin-top: 0.5em;
   color: #666666;
+  font-size: 0.85em;
+}
+
+.error {
+  margin-top: 0.5em;
+  color: #e74c3c;
   font-size: 0.9em;
+}
+
+.panel {
+  margin-top: 1.5em;
+  padding: 1em 1.2em;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.panel h2 {
+  margin: 0 0 0.4em;
+  font-size: 1.1em;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6em;
+}
+
+.panel-header button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.4em 0.9em;
+  font-size: 0.85em;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: #396cd8;
+  color: #ffffff;
+}
+
+.panel-header button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.teams {
+  display: flex;
+  gap: 1.5em;
+}
+
+.team {
+  flex: 1;
+  min-width: 0;
+}
+
+.team h3 {
+  margin: 0 0 0.3em;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #666666;
+}
+
+.team ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.team li {
+  padding: 0.2em 0;
+  font-size: 0.95em;
+}
+
+.team li.me {
+  font-weight: 700;
+}
+
+.team .position {
+  color: #888888;
+  font-size: 0.85em;
+}
+
+.pool-list {
+  list-style: none;
+  margin: 0.6em 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.pool-entry {
+  padding: 0.6em 0.8em;
+  border-radius: 8px;
+  background-color: #f6f6f6;
+}
+
+.pool-entry-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6em;
+}
+
+.pool-champion-name {
+  font-weight: 600;
+}
+
+.pool-mastery {
+  font-size: 0.8em;
+  color: #666666;
+}
+
+.pool-entry-meta {
+  margin-top: 0.35em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+}
+
+.badge {
+  font-size: 0.75em;
+  padding: 0.15em 0.55em;
+  border-radius: 999px;
+  background-color: #e4e4e4;
+  color: #333333;
+}
+
+.badge.grade {
+  background-color: #fce8a8;
+  color: #7a5c00;
+  font-weight: 700;
+}
+
+.badge.rusty {
+  background-color: #fbdcd4;
+  color: #a13a1f;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -65,5 +204,41 @@ h1 {
 
   .hint {
     color: #aaaaaa;
+  }
+
+  .panel {
+    background-color: #262626;
+    box-shadow: none;
+  }
+
+  .team h3 {
+    color: #aaaaaa;
+  }
+
+  .team .position {
+    color: #999999;
+  }
+
+  .pool-entry {
+    background-color: #1d1d1d;
+  }
+
+  .pool-mastery {
+    color: #aaaaaa;
+  }
+
+  .badge {
+    background-color: #3a3a3a;
+    color: #dddddd;
+  }
+
+  .badge.grade {
+    background-color: #6b551a;
+    color: #ffe6a3;
+  }
+
+  .badge.rusty {
+    background-color: #5a2a1c;
+    color: #ffcdbd;
   }
 }

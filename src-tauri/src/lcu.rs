@@ -6,8 +6,15 @@ pub struct LcuCredentials {
     pub token: String,
 }
 
+impl LcuCredentials {
+    pub fn base_url(&self) -> String {
+        format!("https://127.0.0.1:{}", self.port)
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Summoner {
+    pub puuid: String,
     #[serde(rename = "displayName")]
     pub display_name: String,
     #[serde(rename = "summonerLevel")]
@@ -60,16 +67,19 @@ fn extract_arg(cmd: &[String], prefix: &str) -> Option<String> {
         .find_map(|arg| arg.strip_prefix(prefix).map(str::to_string))
 }
 
-pub async fn fetch_current_summoner(creds: &LcuCredentials) -> Result<Summoner, String> {
-    let client = reqwest::Client::builder()
-        .danger_accept_invalid_certs(true) // LCU usa certificado autoassinado, só em 127.0.0.1
+/// Cliente HTTP compartilhado pra falar com a LCU API. O certificado é
+/// autoassinado pelo próprio cliente do League e só é usado em 127.0.0.1.
+pub fn build_client() -> Result<reqwest::Client, String> {
+    reqwest::Client::builder()
+        .danger_accept_invalid_certs(true)
         .build()
-        .map_err(|err| err.to_string())?;
+        .map_err(|err| err.to_string())
+}
 
-    let url = format!(
-        "https://127.0.0.1:{}/lol-summoner/v1/current-summoner",
-        creds.port
-    );
+pub async fn fetch_current_summoner(creds: &LcuCredentials) -> Result<Summoner, String> {
+    let client = build_client()?;
+
+    let url = format!("{}/lol-summoner/v1/current-summoner", creds.base_url());
 
     let response = client
         .get(url)
