@@ -1,49 +1,53 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
+import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
+import { listen } from "@tauri-apps/api/event";
 import "./App.css";
 
-function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+type Summoner = {
+  displayName: string;
+  summonerLevel: number;
+  profileIconId: number;
+};
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
+type LcuStatus =
+  | { state: "disconnected" }
+  | { state: "connected"; summoner: Summoner };
+
+function App() {
+  const [status, setStatus] = useState<LcuStatus>({ state: "disconnected" });
+
+  useEffect(() => {
+    invoke<LcuStatus>("get_lcu_status").then(setStatus);
+
+    const unlisten = listen<LcuStatus>("lcu-status", (event) => {
+      setStatus(event.payload);
+    });
+
+    return () => {
+      unlisten.then((fn) => fn());
+    };
+  }, []);
+
+  const connected = status.state === "connected";
 
   return (
     <main className="container">
-      <h1>Welcome to Tauri + React</h1>
+      <h1>PoolVasta</h1>
 
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="status-row">
+        <span className={`status-dot ${connected ? "online" : "offline"}`} />
+        <span>
+          {connected
+            ? `Conectado como ${status.summoner.displayName} (nível ${status.summoner.summonerLevel})`
+            : "Cliente do League não encontrado"}
+        </span>
       </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
 
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
+      {!connected && (
+        <p className="hint">
+          Abra o cliente do League of Legends pra conectar automaticamente.
+        </p>
+      )}
     </main>
   );
 }
